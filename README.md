@@ -1,5 +1,5 @@
 # UKB.COVID19
-An R package to assist with the UK Biobank COVID-19 data processing and risk factor association tests
+An R package to assist with the UK Biobank COVID-19 data processing and risk factor association tests.
 
 See UKB.COVID19_example.R script for usage example.
 
