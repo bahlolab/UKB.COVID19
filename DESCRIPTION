@@ -1,0 +1,17 @@
+Package: UKB.COVID19
+Type: Package
+Title: UK Biobank COVID-19 data processing and risk factor association tests
+Version: 0.1.0
+Authors@R: person("Longfei", "Wang", email = "wang.lo@wehi.edu.au", role = c("aut", "cre"))
+Maintainer: Longfei Wang <wang.lo@wehi.edu.au>
+Description: UKB.COVID19
+	1) process UK Biobank COVID-19 test result data for susceptibility, severity and mortality analyses
+	2) conduct potential non-genetic COVID-19 risk association tests
+	3) perform co-morbidity and COVID-19 association tests
+Imports:
+    questionr,
+    data.table
+License: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+URL: https://github.com/bahlolab/UKB.COVID19
+Encoding: UTF-8
+LazyData: true
