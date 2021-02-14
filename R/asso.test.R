@@ -10,6 +10,6 @@ log.cov <- function(data, phe.name, cov.name = c("sex","age","bmi"), asso.output
   OR <- odds.ratio(m)
   asso <- as.data.frame(cbind(log.reg$coefficients[,1],OR[,c(1:4)]))
   colnames(asso)[1] <- "Estimate"
-  if(!(is.null(asso.output))) write.csv(asso,asso.output,quote = F)
+  if(!(is.null(asso.output))) write.csv(asso,paste0(asso.output,".csv"),quote = F)
   return(asso)
 }
