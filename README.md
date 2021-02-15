@@ -23,9 +23,7 @@ library(questionr) # for odd ratio calculation in association test
 require(data.table)
 ```
 
-## Examples
-
-### Susceptibility
+## Susceptibility
 
 Function: `COVID19.susceptibility(res.file, cov.file =  "./data/covariate.v0.txt", 
 Date = NULL, out.name = NULL)`
@@ -34,7 +32,7 @@ Definitions of COVID-19 susceptibility: 1) pos.neg: COVID-19 positive vs negativ
 
 Arguments:
 - `res.file`: the name of the test result file from UKB.
-- `cov.file`: provided by the package, includes the potential non-genetic risk factors of all UKB participants: sex, age, BMI, ethnic background, array, socioeconomic status (SES), smoking, blood group, and if the participant is living in an aged care home. We will keep updating this file and including more risk factors. All the multi-category variables, such as, ethnic background and blood group, have been converted to multiple dummy variables for the association tests. By default, it’s under {work directory}/data/.
+- `cov.file`: provided by the package, includes the potential non-genetic risk factors of all UKB participants: sex, age, BMI, ethnic background, array, socioeconomic status (SES), smoking, blood group, and if the participant is living in an aged care home. We will keep updating this file and including more risk factors. All the multi-category variables, such as, ethnic background and blood group, have been converted to multiple dummy variables for the association tests. By default, it’s under {work directory}/data/. Needs to be unzipped first.
 - `Date`:  select the results until a certain date. By default, Date = NULL, the latest testing date. The date format has to be %d/%m/%Y. For example, by setting Date = 01/10/2020, the function will select the test results by the 1st of Oct 2020. 
 - `out.name`: output file name. By default, out.name = NULL, “result_[Date].txt”.
 output files:
@@ -42,15 +40,10 @@ output files:
   - Positive vs population + covariates.
 And a list including two data. The output files can be used for SAIGE GWAS analyses directly. 
 
-Specify UKB COVID-19 test result file location and name.
-The covariate data is built in the R package. Please unzip it and specify the location.
+#### Example
 ```r
 res.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210120_covid19_result.txt"
 cov.file <- "/stornext/Home/data/allstaff/w/wang.lo/hpc_home/CoVID-19/data/covariate.v0.txt"
-```
-
-Process UKB COVID-19 test result data for susceptibility analyses
-```r
 res <- COVID19.susceptibility(res.file, cov.file)
 ```
 
