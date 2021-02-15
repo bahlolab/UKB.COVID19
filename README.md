@@ -36,7 +36,7 @@ Arguments:
 - `res.file`: the name of the test result file from UKB.
 - `cov.file`: provided by the package, includes the potential non-genetic risk factors of all UKB participants: sex, age, BMI, ethnic background, array, socioeconomic status (SES), smoking, blood group, and if the participant is living in an aged care home. We will keep updating this file and including more risk factors. All the multi-category variables, such as, ethnic background and blood group, have been converted to multiple dummy variables for the association tests. By default, it’s under {work directory}/data/. Needs to be unzipped first.
 - `Date`:  select the results until a certain date. By default, Date = NULL, the latest testing date. The date format has to be %d/%m/%Y. For example, by setting Date = 01/10/2020, the function will select the test results by the 1st of Oct 2020. 
-- `out.name`: output file name. By default, out.name = NULL, “result_[Date].txt”.
+- `out.name`: output file name. By default, out.name = NULL, “result_{Date}.txt”.
 output files:
   - Positive vs negative + covariates.
   - Positive vs population + covariates.
@@ -96,7 +96,7 @@ log.cov(data=ppl.white, phe.name="pos.neg",
 
 ## Mortality
 
-Function: `mortality.summary(res.file, death.file, death.cause.file, Date = NULL, out.name = "mortality")`
+Function: `COVID19.mortality(res.file, death.file, death.cause.file, cov.file= "./data/covariate.v0.txt", Date=NULL, out.name=NULL)`
 
 The definition of mortality: participants with COVID-19 as primary death cause vs the other participants with positive COVID-19 test results.
 
@@ -104,8 +104,9 @@ Arguments:
 - `res.file`: the file name of the COVID-19 test result date from UKB.
 - `death.file`: the file name of the death records from UKB.
 - `death.cause.file`: the file name of the death cause data from UKB.
+- `cov.file`: the file name of the covariate data built in the R package.
 - `Date`:  select the results until a certain date. The date shouldn’t be later than the latest testing date or the latest death information date. By default, Date = NULL, the latest testing date if the death information date is more recent, and vice versa. For example, the latest testing date is 18/01/2021 and the latest death information released date is 18/12/2020. If we set Date = NULL, the function will select both data generated until 18/12/2020. Since all data are updated at the different frequency. To combine different datasets, we need to make sure the time period consistent. The date format has to be %d/%m/%Y.
-- `out.name`: output file name. By default, out.name = NULL, “mortality_[Date].txt”.
+- `out.name`: output file name. By default, out.name = NULL, “mortality_{Date}.txt”.
 
 #### Example
 
@@ -135,7 +136,7 @@ log.cov(data=mortality.white, phe.name="mortality",
 
 ## Severity
 
-Function: `severity.summary(res.file, death.file, death.cause.file, hesin.file, hesin_diag.file, hesin_oper.file, hesin_critical.file, Date=NULL, out.name=NULL)`
+Function: `COVID19.severity(res.file, death.file, death.cause.file, hesin.file, hesin_diag.file, hesin_oper.file, hesin_critical.file, cov.file= "./data/covariate.v0.txt", code.file= "./data/coding240.tsv", Date=NULL, out.name=NULL)`
 
 Four definitions of severity:
 - hospitalization
@@ -150,8 +151,10 @@ Arguments:
 - `hesin_diag.file`: the file name of the HES inpatient diagnosis date from UKB.
 - `hesin_oper.file`: the file name of the HES inpatient operation date from UKB.
 - `hesin_critical.file`: the file name of the HES inpatient critical care data from UKB.
+- `cov.file`: the name of the covariate file.
+- `code.file`: the name of the coding 240 file for operation catagory.
 - `Date`:  select the results until a certain date. The date shouldn’t be later than the latest testing date, the latest death information date or the latest hospitalisation information date. By default, Date = NULL, the latest date for all release datasets. The date format has to be %d/%m/%Y.
-- `out.name`: output file name. By default, out.name = NULL, “mortality_[Date].txt”.
+- `out.name`: output file name. By default, out.name = NULL, “mortality_{Date}.txt”.
 
 #### Example
 
@@ -207,6 +210,8 @@ log.cov(data=severity.white, phe.name="severe.lev3",
 
 ## Co-morbidity
 
+Function: `comorbidity.summary(hesin.file, hesin_diag.file, cov.file="./data/covariate.v0.txt", primary=FALSE, ICD10.file="./data/ICD10.coding19.tsv", Date.start=NULL, Date.end=NULL)`
+
 #### Example
 
 ```r
@@ -218,6 +223,10 @@ ICD10 <- "/stornext/Home/data/allstaff/w/wang.lo/hpc_home/CoVID-19/data/ICD10.co
 comorbidity.summary(hesin.file, hesin_diag.file, cov.file=cov, ICD10.file=ICD10, Date.end="01/04/2019")
 # set the end of Date as the first test day, to exclude the morbidities caused by CoVID-19
 ```
+
+
+
+#### Example
 
 white British, severity vs co-morbidity
 ```r
