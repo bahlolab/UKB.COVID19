@@ -27,19 +27,7 @@ require(data.table)
 
 ### Susceptibility
 
-
-Specify UKB COVID-19 test result file location and name.
-The covariate data is built in the R package. Please unzip it and specify the location.
-```r
-res.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210120_covid19_result.txt"
-cov.file <- "/stornext/Home/data/allstaff/w/wang.lo/hpc_home/CoVID-19/data/covariate.v0.txt"
-```
-
-Process UKB COVID-19 test result data for susceptibility analyses
-```r
-res <- COVID19.susceptibility(res.file, cov.file)
-```
-`COVID19.susceptibility(res.file, cov.file =  "./data/covariate.v0.txt", 
+Function: `COVID19.susceptibility(res.file, cov.file =  "./data/covariate.v0.txt", 
 Date = NULL, out.name = NULL)`
 
 Definitions of COVID-19 susceptibility: 1) pos.neg: COVID-19 positive vs negative; 2) pos.ppl: COVID-19 positive vs population, all the other participants in UKB, including those who got negative test results or people who didn’t get tested yet.
@@ -53,6 +41,18 @@ output files:
   - Positive vs negative + covariates.
   - Positive vs population + covariates.
 And a list including two data. The output files can be used for SAIGE GWAS analyses directly. 
+
+Specify UKB COVID-19 test result file location and name.
+The covariate data is built in the R package. Please unzip it and specify the location.
+```r
+res.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210120_covid19_result.txt"
+cov.file <- "/stornext/Home/data/allstaff/w/wang.lo/hpc_home/CoVID-19/data/covariate.v0.txt"
+```
+
+Process UKB COVID-19 test result data for susceptibility analyses
+```r
+res <- COVID19.susceptibility(res.file, cov.file)
+```
 
 Association test of susceptibility (positive vs negative) 
 ```r
