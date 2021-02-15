@@ -212,6 +212,8 @@ log.cov(data=severity.white, phe.name="severe.lev3",
 
 Function: `comorbidity.summary(hesin.file, hesin_diag.file, cov.file="./data/covariate.v0.txt", primary=FALSE, ICD10.file="./data/ICD10.coding19.tsv", Date.start=NULL, Date.end=NULL)`
 
+Summarise co-morbidity information based on HES data and the given time period. 
+
 #### Example
 
 ```r
@@ -224,7 +226,9 @@ comorbidity.summary(hesin.file, hesin_diag.file, cov.file=cov, ICD10.file=ICD10,
 # set the end of Date as the first test day, to exclude the morbidities caused by CoVID-19
 ```
 
+Function: `comorbidity.asso(res.file, cormorbidity.file, population = "all", covars=c("sex","age","bmi"), phe.name, output=NULL)`
 
+Association tests between each co-morbidity and given phenotype (susceptibility, mortality or severity) with the adjustment of covariates. 
 
 #### Example
 
