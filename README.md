@@ -28,7 +28,9 @@ require(data.table)
 Function: `COVID19.susceptibility(res.file, cov.file =  "./data/covariate.v0.txt", 
 Date = NULL, out.name = NULL)`
 
-Definitions of COVID-19 susceptibility: 1) pos.neg: COVID-19 positive vs negative; 2) pos.ppl: COVID-19 positive vs population, all the other participants in UKB, including those who got negative test results or people who didn’t get tested yet.
+Definitions of COVID-19 susceptibility: 
+- pos.neg: COVID-19 positive vs negative; 
+- pos.ppl: COVID-19 positive vs population, all the other participants in UKB, including those who got negative test results or people who didn’t get tested yet.
 
 Arguments:
 - `res.file`: the name of the test result file from UKB.
