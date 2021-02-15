@@ -1,5 +1,5 @@
 # UKB.COVID19
-An R package to assist with the UK Biobank COVID-19 data processing and risk factor association tests.
+An R package to assist with the UK Biobank (UKB) COVID-19 data processing, risk factor association tests and generate [SAIGE](https://github.com/weizhouUMICH/SAIGE) GWAS phenotype file.
 
 See UKB.COVID19_example.R script for usage example.
 
@@ -39,9 +39,20 @@ Process UKB COVID-19 test result data for susceptibility analyses
 ```r
 res <- COVID19.susceptibility(res.file, cov.file)
 ```
-Output: a list include two datasets for susceptibility
-- definition 1. positive vs negative
-- definition 2. positive vs population
+`COVID19.susceptibility(res.file, cov.file =  "./data/covariate.v0.txt", 
+Date = NULL, out.name = NULL)`
+
+Definitions of COVID-19 susceptibility: 1) pos.neg: COVID-19 positive vs negative; 2) pos.ppl: COVID-19 positive vs population, all the other participants in UKB, including those who got negative test results or people who didn’t get tested yet.
+
+Arguments:
+- `res.file`: the name of the test result file from UKB.
+- `cov.file`: provided by the package, includes the potential non-genetic risk factors of all UKB participants: sex, age, BMI, ethnic background, array, socioeconomic status (SES), smoking, blood group, and if the participant is living in an aged care home. We will keep updating this file and including more risk factors. All the multi-category variables, such as, ethnic background and blood group, have been converted to multiple dummy variables for the association tests. By default, it’s under {work directory}/data/.
+- `Date`:  select the results until a certain date. By default, Date = NULL, the latest testing date. The date format has to be %d/%m/%Y. For example, by setting Date = 01/10/2020, the function will select the test results by the 1st of Oct 2020. 
+- `out.name`: output file name. By default, out.name = NULL, “result_[Date].txt”.
+output files:
+  - Positive vs negative + covariates.
+  - Positive vs population + covariates.
+And a list including two data. The output files can be used for SAIGE GWAS analyses directly. 
 
 Association test of susceptibility (positive vs negative) 
 ```r
