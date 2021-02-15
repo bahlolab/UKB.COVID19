@@ -47,6 +47,8 @@ cov.file <- "/stornext/Home/data/allstaff/w/wang.lo/hpc_home/CoVID-19/data/covar
 res <- COVID19.susceptibility(res.file, cov.file)
 ```
 
+## Association Test
+
 Function: `log.cov(data, phe.name, cov.name = c("sex","age","bmi"), asso.output = NULL)`
 
 Association tests using logistic regression model.
