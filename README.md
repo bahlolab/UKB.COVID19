@@ -217,6 +217,15 @@ Function: `comorbidity.summary(hesin.file, hesin_diag.file, cov.file="./data/cov
 
 Summarise co-morbidity information based on HES data and the given time period. 
 
+Arguments:
+- `hesin.file`: the file name of the HES inpatient core dataset from UKB.
+- `hesin_diag.file`: the file name of the HES inpatient diagnosis date from UKB.
+- `cov.file`: the file name of the covariate data.
+- `primary`: if only the primary diagnoses will be included in the analysis. By default, primary=FALSE, all diagoses will be inlcuded.
+- `ICD10.file`: ICD10 coding file for the diagnosis data.
+- `Date.start`: the start date of the selcted time period.
+- `Date.end`: the end date of the selecte time period.
+
 #### Example
 
 ```r
@@ -229,9 +238,17 @@ comorbidity.summary(hesin.file, hesin_diag.file, cov.file=cov, ICD10.file=ICD10,
 # set the end of Date as the first test day, to exclude the morbidities caused by CoVID-19
 ```
 
-Function: `comorbidity.asso(res.file, cormorbidity.file, population = "all", covars=c("sex","age","bmi"), phe.name, output=NULL)`
+Function: `comorbidity.asso(res.file, comorbidity.file, population = "all", covars=c("sex","age","bmi"), phe.name, output=NULL)`
 
 Association tests between each co-morbidity and given phenotype (susceptibility, mortality or severity) with the adjustment of covariates. 
+
+Arguments:
+- `res.file`: the test results file name.
+- `comorbidity.file`: the comorbidity file generated from function `comorbidity.summary`.
+- `population`: the selected population/ethnic group. By default, population="all", include all ethnic groups.
+- `covars`: the covariates included in the analysis.
+- `phe.name`: phenotype name.
+- `output`: the output file name. By default, output=NULL, it is {population}_{phenotype name}_comorbidity_asso.csv.
 
 #### Example
 
