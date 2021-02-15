@@ -94,16 +94,25 @@ log.cov(data=ppl.white, phe.name="pos.neg",
 
 ## Mortality
 
-Input test result file, death record file, death cause file and covariate file.
+Function: `mortality.summary(res.file, death.file, death.cause.file, Date = NULL, out.name = "mortality")`
+
+The definition of mortality: participants with COVID-19 as primary death cause vs the other participants with positive COVID-19 test results.
+
+Arguments:
+- `res.file`: the file name of the COVID-19 test result date from UKB.
+- `death.file`: the file name of the death records from UKB.
+- `death.cause.file`: the file name of the death cause data from UKB.
+- `Date`:  select the results until a certain date. The date shouldn’t be later than the latest testing date or the latest death information date. By default, Date = NULL, the latest testing date if the death information date is more recent, and vice versa. For example, the latest testing date is 18/01/2021 and the latest death information released date is 18/12/2020. If we set Date = NULL, the function will select both data generated until 18/12/2020. Since all data are updated at the different frequency. To combine different datasets, we need to make sure the time period consistent. The date format has to be %d/%m/%Y.
+- `out.name`: output file name. By default, out.name = NULL, “mortality_[Date].txt”.
+
+#### Example
+
 ```r
 res.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210120_covid19_result.txt"
 death.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210121_death.txt"
 death.cause.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210121_death_cause.txt"
 cov.file <- "/stornext/Home/data/allstaff/w/wang.lo/hpc_home/CoVID-19/data/covariate.v0.txt"
-```
 
-Process test result data, death record data for mortality analyses
-```r
 mortality <- COVID19.mortality(res.file, death.file, death.cause.file, cov.file)
 ```
 
@@ -122,7 +131,7 @@ log.cov(data=mortality.white, phe.name="mortality",
   asso.output = "white.mortality1")
 ```
 
-### Severity
+## Severity
 
 ```r
 res.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210120_covid19_result.txt"
