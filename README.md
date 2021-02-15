@@ -47,6 +47,20 @@ cov.file <- "/stornext/Home/data/allstaff/w/wang.lo/hpc_home/CoVID-19/data/covar
 res <- COVID19.susceptibility(res.file, cov.file)
 ```
 
+Function: `log.cov(data, phe.name, cov.name = c("sex","age","bmi"), asso.output = NULL)`
+
+Association tests using logistic regression model.
+
+Arguments:
+- `data`: the output from COVID19.susceptibility, COVID19.mortality, or COVID19.severity.
+- `phe.name`: "pos.neg", "pos.ppl", "mortality", "hosp", "severe.lev2", or "severe.lev3".
+- `cov.name`: select among: "sex", "age", "bmi", "SES", "black", "asian", "other.ppl", "mixed", "O", "AB", "A", "inAgedCare". "black", "asian", "other.ppl", "mixed" are dummy variables comparing to white British. "O", "AB", "A" are dummy variables comparing to blood group B. By default, cov.name = c("sex","age","bmi"), covariates include sex, age and BMI.
+- `asso.ouput`: generate a csv file including association test results (estimate, odds ratio and p-value). by default, asso.output=NULL, it doesn’t generate an output file. 
+
+Note: participants with missing values in the result or the covariates included in the association test will be omitted.
+
+#### Example
+
 Association test of susceptibility (positive vs negative) 
 ```r
 log.cov(data=res$tested, phe.name="pos.neg", 
@@ -61,7 +75,7 @@ log.cov(data=res$population, phe.name="pos.ppl",
   asso.output = "pos.ppl")
 ```
 
-Association test for white British only 
+Association test of susceptibility for white British only 
 ```r
 tested <- res$tested
 res.white <- tested[tested$white == 1 & !(is.na(tested$white)),]
@@ -76,7 +90,7 @@ log.cov(data=ppl.white, phe.name="pos.neg",
   asso.output = "white.pos.ppl")
 ```
 
-### Mortality
+## Mortality
 
 Input test result file, death record file, death cause file and covariate file.
 ```r
