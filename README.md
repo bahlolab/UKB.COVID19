@@ -141,7 +141,6 @@ Four definitions of severity:
 - hospitalization
 - severity level 2
 - severity level 3
-- mortality
 
 Arguments:
 - `res.file`: the file name of the COVID-19 test result date from UKB.
@@ -192,13 +191,6 @@ log.cov(data=severity, phe.name="severe.lev3",
   asso.output = "sev.lev3")
 ```
 
-Association test of mortality
-```r
-log.cov(data=severity, phe.name="mortality", 
-  cov.name=c("sex","age","bmi","SES","smoke","black","inAgedCare"), 
-  asso.output = "mortality2")
-```
-
 Association test for white British only
 ```r
 severity.white <- severity[severity$white == 1 & !(is.na(severity$white)),]
@@ -211,9 +203,6 @@ log.cov(data=severity.white, phe.name="severe.lev2",
 log.cov(data=severity.white, phe.name="severe.lev3", 
   cov.name=c("sex","age","bmi","smoke"), 
   asso.output = "white.sev.lev3")
-log.cov(data=severity.white, phe.name="mortality", 
-  cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"), 
-  asso.output = "white.mortality2")
 ```
 
 ## Co-morbidity
@@ -237,7 +226,6 @@ cormorbidity.file <- "comorbidity_1991-04-18_2019-04-01.RData"
 comorbidity.asso(res.file, cormorbidity.file, population="white", covars=c("sex","age","bmi","SES","smoke","inAgedCare"), phe.name="hosp")
 comorbidity.asso(res.file, cormorbidity.file, population="white", covars=c("sex","age","bmi","SES","smoke","inAgedCare"), phe.name="severe.lev2")
 comorbidity.asso(res.file, cormorbidity.file, population="white", covars=c("sex","age","bmi","SES","smoke","inAgedCare"), phe.name="severe.lev3")
-comorbidity.asso(res.file, cormorbidity.file, population="white", covars=c("sex","age","bmi","SES","smoke","inAgedCare"), phe.name="mortality")
 ```
 
 white British, susceptibility vs co-morbidity
