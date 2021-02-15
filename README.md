@@ -43,7 +43,7 @@ output files:
   - Positive vs negative + covariates.
   - Positive vs population + covariates.
 
-And a list including both of the datasets. The output files can be used for SAIGE GWAS analyses directly. 
+The output also returns a list including both of the datasets. The output files can be used for SAIGE GWAS analyses directly. 
 
 #### Example
 ```r
