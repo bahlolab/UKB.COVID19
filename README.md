@@ -5,6 +5,8 @@ See UKB.COVID19_example.R script for usage example.
 
 Currently, `UKB.COVID19` is available as a beta release however is still under active development and subject to change. Please contact [Longfei Wang](wang.lo@wehi.edu.au) if you would like to test the development version or to report any issues, feedback or feature requests.
 
+Note: for the UKB COVID-19 test result data and the other UKB data, you can download the datasets after applying for them on UKB website.
+
 ## Installation
 
 ```r
