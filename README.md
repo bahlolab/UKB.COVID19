@@ -133,6 +133,27 @@ log.cov(data=mortality.white, phe.name="mortality",
 
 ## Severity
 
+Function: `severity.summary(res.file, death.file, death.cause.file, hesin.file, hesin_diag.file, hesin_oper.file, hesin_critical.file, Date=NULL, out.name=NULL)`
+
+Four definitions of severity:
+- hospitalization
+- severity level 2
+- severity level 3
+- mortality
+
+Arguments:
+- `res.file`: the file name of the COVID-19 test result date from UKB.
+- `death.file`: the file name of the death records from UKB.
+- `death.cause.file`: the file name of the death cause data from UKB.
+- `hesin.file`: the file name of the HES inpatient core dataset from UKB.
+- `hesin_diag.file`: the file name of the HES inpatient diagnosis date from UKB.
+- `hesin_oper.file`: the file name of the HES inpatient operation date from UKB.
+- `hesin_critical.file`: the file name of the HES inpatient critical care data from UKB.
+- `Date`:  select the results until a certain date. The date shouldn’t be later than the latest testing date, the latest death information date or the latest hospitalisation information date. By default, Date = NULL, the latest date for all release datasets. The date format has to be %d/%m/%Y.
+- `out.name`: output file name. By default, out.name = NULL, “mortality_[Date].txt”.
+
+#### Example
+
 ```r
 res.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210120_covid19_result.txt"
 death.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210121_death.txt"
@@ -143,17 +164,10 @@ hesin_oper.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/ph
 hesin_critical.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210122_hesin_critical.txt"
 cov.file <- "/stornext/Home/data/allstaff/w/wang.lo/hpc_home/CoVID-19/data/covariate.v0.txt"
 code.file <- "/stornext/Home/data/allstaff/w/wang.lo/hpc_home/CoVID-19/data/coding240.tsv"
-```
 
-Process test result data, death record data, hospitalization data for severity analyses
-```r
+
 severity <- COVID19.severity(res.file, death.file, death.cause.file, hesin.file, hesin_diag.file, hesin_oper.file, hesin_critical.file, cov.file, code.file)
 ```
-Four definitions of severity:
-- hospitalization
-- severity level 2
-- severity level 3
-- mortality
 
 Association test of hospitalizatiopn
 ```r
@@ -200,17 +214,19 @@ log.cov(data=severity.white, phe.name="mortality",
   asso.output = "white.mortality2")
 ```
 
+## Co-morbidity
 
-### Co-morbidity
+#### Example
 
 ```r
 hesin.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210122_hesin.txt"
 hesin_diag.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210122_hesin_diag.txt"
 cov <- "/stornext/Home/data/allstaff/w/wang.lo/hpc_home/CoVID-19/data/covariate.v0.txt"
 ICD10 <- "/stornext/Home/data/allstaff/w/wang.lo/hpc_home/CoVID-19/data/ICD10.coding19.tsv"
+
 comorbidity.summary(hesin.file, hesin_diag.file, cov.file=cov, ICD10.file=ICD10, Date.end="01/04/2019")
+# set the end of Date as the first test day, to exclude the morbidities caused by CoVID-19
 ```
-set the end of Date as the first test day, to exclude the morbidities caused by CoVID-19
 
 white British, severity vs co-morbidity
 ```r
