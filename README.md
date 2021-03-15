@@ -5,7 +5,8 @@ See UKB.COVID19_example.R script for usage example.
 
 Currently, `UKB.COVID19` is available as a beta release however it is still under active development and subject to change. Please contact [Longfei Wang](wang.lo@wehi.edu.au) if you would like to test the development version or to report any issues, feedback or feature requests.
 
-Note: for the UKB COVID-19 test result data and the other UKB data, you can download the datasets after applying for them on UKB website.
+Note: to access the UKB datasets, you need to register as an UKB researcher. If you are already an approved UKB researcher with a project underway, and wish to receive these datasets for COVID-19 research purposes, you can register to receive these data by logging into the [Access Management System (AMS)](https://bbams.ndph.ox.ac.uk/ams/resApplications).
+
 
 ## Installation
 
