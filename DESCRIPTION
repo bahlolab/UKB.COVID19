@@ -10,7 +10,9 @@ Description: UKB.COVID19
 	3) perform co-morbidity and COVID-19 association tests
 Imports:
     questionr,
-    data.table
+    data.table,
+    tidyverse,
+    magrittr
 License: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
 URL: https://github.com/bahlolab/UKB.COVID19
 Encoding: UTF-8
