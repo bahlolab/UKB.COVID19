@@ -1,14 +1,42 @@
+#' Generate covariate file
+#'
+#' This function formats and outputs a covariate file, used for input for other functions.
+#' @param ukb.data tab delimited UK Biobank phenotype file.
+#' @param ABO.data Latest yyyymmdd_covid19_misc.txt file.
+#' @param hesin.file Latest yyyymmdd_hesin.txt file.
+#' @param out.file Name of covariate file to be outputted.
+#' @keywords covariates
+#' @export risk.factor
+#' @return Outputs covariate file, used for input for other functions.
+#' @import data.table
+#' @importFrom magrittr %>%
+#' @import tidyverse
+
+
 # rm(list=ls())
 # setwd("/stornext/Home/data/allstaff/w/wang.lo/hpc_home/CoVID-19/")
 # ukb.data <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/data/app36610/rawPheno/ukb42082.tab"
 # ABO.data <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20200814_covid19_misc.txt"
-# inAgedCare.data <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/AnalysisVEJ/APOE/apoe_careHome_pheno.txt"
+
 risk.factor <- function(ukb.data, ABO.data, hesin.file, out.file = NULL){
-  # db <- read.table(ukb.data, header = T, sep = "\t")
-  # Use fread, to only read in relevant fields
-  db <- fread(ukb.data,
-    select=c("f.eid", "f.31.0.0", "f.21001.0.0", "f.21001.1.0", "f.21001.2.0", "f.21001.3.0", "f.21000.0.0", "f.21000.1.0", "f.21000.2.0", "f.22000.0.0", "f.189.0.0", "f.20161.0.0", "f.20161.1.0", "f.20161.2.0", "f.20161.3.0"), quote="") %>%
-    as.data.frame
+
+  # Create temp file using awk with relevant fields only
+
+  colnames <- fread(ukb.data, nrows=0)
+
+  idx <- c(names(colnames) %in% c("f.eid", "f.31.0.0", "f.189.0.0") %>% which,
+  names(colnames) %like% "f.21001." %>% which,
+  names(colnames) %like% "f.21000." %>% which,
+  names(colnames) %like% "f.20161." %>% which)
+
+
+  fields <- paste0("$",idx, collapse=", ")
+  cmd <- paste("awk ' { print ", fields, " }' ",ukb.data," > tmp.txt")
+  system(cmd)
+
+
+  # read in temp file
+  db <- read.table(tmp.csv, header = T, sep = "\t")
 
   # sex: 1- male, 0- female
   phe <- db[,c("f.eid","f.31.0.0")]
@@ -81,7 +109,9 @@ risk.factor <- function(ukb.data, ABO.data, hesin.file, out.file = NULL){
   phe[, "inAgedCare"] <- case_when(phe$ID %in% agedCareIds ~ 1,
                     phe$ID %in% noAgedCareIds ~ 0,
                     T ~ NA_real_)
-  
+
   if(is.null(out.file)) out.file <- "covariate"
   write.table(phe,paste0(out.file,".txt"),row.names = F, quote = F, sep = "\t")
+
+  sytem("rm tmp.txt")
 }
