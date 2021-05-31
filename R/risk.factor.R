@@ -113,5 +113,5 @@ risk.factor <- function(ukb.data, ABO.data, hesin.file, out.file = NULL){
   if(is.null(out.file)) out.file <- "covariate"
   write.table(phe,paste0(out.file,".txt"),row.names = F, quote = F, sep = "\t")
 
-  sytem("rm tmp.txt")
+  system("rm tmp.txt")
 }
