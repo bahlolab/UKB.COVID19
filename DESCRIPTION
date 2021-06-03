@@ -13,7 +13,7 @@ Imports:
     data.table,
     tidyverse,
     magrittr
-License: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+License: MIT (https://opensource.org/licenses/MIT).
 URL: https://github.com/bahlolab/UKB.COVID19
 Encoding: UTF-8
 LazyData: true
