@@ -1,20 +1,44 @@
+#' Create phenotypes for "susceptibility"
+#'
+#' @param res.eng
+#' @param res.wal
+#' @param res.sco
+#' @param cov.file
+#' @param Date
+#' @param out.name
+#'
+#' @return
+#' @export COVID19.susceptibility
+#'
+#' @examples
+#'
+#' @import data.table
+#' @importFrom magrittr %>%
+#' @import tidyverse
+
 ### summarize result file
-susceptibility.summary <- function(file.name, Date=NULL, out.name=NULL){
-  result <- read.table(file.name, header = T, sep = "\t")
+susceptibility.summary <- function(res.eng, res.wal, res.sco, Date=NULL, out.name=NULL){
+
+
+  inFiles <- c(get0("res.eng"), get0("res.wal"), get0("res.sco"))
+
+
+  result <- lapply(inFiles, fread, select=c("eid", "specdate", "result")) %>%
+    rbindlist %>%
+    as.data.frame
+
   result$specdate <- as.Date(result$specdate, format= "%d/%m/%Y")
   if(is.null(Date)) Date <- max(result$specdate)
   result.date <- result[result$specdate <= Date,]
+
   sampleID <- unique(result.date$eid)
   N <- length(sampleID)
   print(paste0(N," participants got tested until ", Date, "."))
-  res <- as.data.frame(matrix(NA, nrow=N, ncol=2))
-  colnames(res) <- c("ID","result")
-  for(i in 1:N){
-    sample <- result[result$eid == sampleID[i],]
-    res[i,] <- c(sampleID[i],as.numeric(any(sample$result == 1)))
-  }
-  agedcare.id <- unique(result[result$reqorg == 9,"eid"]) 
-  res$ch <- 0; res[res$ID %in% agedcare.id,"ch"] <- 1
+
+  pos <- result.date$eid[result.date$result == 1] %>% unique
+  res <- data.frame(ID = unique(result.date$eid))
+  res$result <- ifelse(res$ID %in% pos, 1, 0)
+
   print(paste0(sum(res$result)," participants got positive test results."))
   if(is.null(out.name)) out.name <- paste0("result_",Date,".txt")
   write.table(res, out.name, row.names = F, quote = F, sep = "\t")
@@ -22,15 +46,13 @@ susceptibility.summary <- function(file.name, Date=NULL, out.name=NULL){
 }
 
 # add covariates
-COVID19.susceptibility <- function(res.file, cov.file= "./data/covariate.v0.txt", Date=NULL, out.name=NULL){
+COVID19.susceptibility <- function(res.eng, res.wal, res.sco, cov.file= "./data/covariate.v0.txt", Date=NULL, out.name=NULL){
   # covariates
   cov <- read.table(cov.file,header = T,stringsAsFactors = F,sep = "\t")
   # test results
-  res <- susceptibility.summary(res.file, Date, out.name)
+  res <- susceptibility.summary(res.eng, res.wal, res.sco, Date, out.name)
   # merge test result and covariates
   res.cov <- merge(res,cov,by.x = "ID",by.y="ID",all = T,sort = F)
-  # add updated aged care information
-  res.cov[res.cov$ch==1 & !(is.na(res.cov$ch)),"inAgedCare"] <- 1
   # add phenotype: population v C19+
   res.cov$ppl.result <- 0; res.cov[res.cov$result == 1 & !(is.na(res.cov$result)),"ppl.result"] <- 1
   # reform variables
