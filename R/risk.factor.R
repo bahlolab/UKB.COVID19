@@ -4,19 +4,22 @@
 #' @param ukb.data tab delimited UK Biobank phenotype file.
 #' @param ABO.data Latest yyyymmdd_covid19_misc.txt file.
 #' @param hesin.file Latest yyyymmdd_hesin.txt file.
+#' @param res.eng Latest covid result file/files for England.
+#' @param res.wal Latest covid result file/files for Wales. Only available for downloads after XXXX.
+#' @param res.sco Latest covid result file/files for Scotland. Only available for downloads after XXXX.
 #' @param fields User specified field codes from ukb.data file.
 #' @param field.names User specified field names.
 #' @param out.file Name of covariate file to be outputted.
 #' @keywords covariates
 #' @export risk.factor
-#' @return Outputs covariate file, used for input for other functions. Automatically returns sex, age at birthday in 2020, SES, self-reported ethnicity, most recently reported BMI, most recently reported pack-years, and blood type. Function also allows user to specify fields of interest (field codes, provided by UK Biobank), and allows the user to specify more intuitive names, for selected fields.
+#' @return Outputs covariate file, used for input for other functions. Automatically returns sex, age at birthday in 2020, SES, self-reported ethnicity, most recently reported BMI, most recently reported pack-years, whether they reside in aged care (based on hospital admissions data, and covid test data) and blood type. Function also allows user to specify fields of interest (field codes, provided by UK Biobank), and allows the user to specify more intuitive names, for selected fields.
 #' @import data.table
 #' @importFrom magrittr %>%
 #' @import tidyverse
 
 
 
-risk.factor <- function(ukb.data, ABO.data, hesin.file, fields = NULL, field.names = NULL, out.file = NULL){
+risk.factor <- function(ukb.data, ABO.data, hesin.file, res.eng, res.wal, res.sco, fields = NULL, field.names = NULL, out.file = NULL){
 
   # Create temp file using awk with relevant fields only
 
@@ -103,15 +106,48 @@ risk.factor <- function(ukb.data, ABO.data, hesin.file, fields = NULL, field.nam
 
   hesIn <- data.table::fread(hesin.file)
 
+
+  # Evidence of aged care from HES data
   agedCare <- hesIn[, sourceAged := admisorc_uni %in% c(7000, 7001, 7002, 7003)] %>%
     .[, dischargeAged := disdest_uni %in% c(7000, 7001, 7002, 7003)]
 
   agedCareIds <- agedCare[sourceAged==T | dischargeAged==T , eid] %>% unique
   noAgedCareIds <- agedCare[sourceAged==F & dischargeAged==F  & !(eid %in% agedCareIds), eid] %>% unique
 
+  # Also bring in evidence of being in aged care from covid tests data.
+
+  if(!is.null(res.eng)) {
+
+    agedCareIdsEng <- fread(res.eng, select=c("eid", "reqorg")) %>%
+      .[reqorg == 9, eid] %>%
+      unique
+
+  }
+
+  if(!is.null(res.wal)) {
+
+    agedCareIdsWal <- fread(res.wal, select=c("eid", "perstype")) %>%
+      .[perstype %in% c(1, 10,  25, 30, 36, 39, 79), eid] %>%
+      unique
+
+  }
+  if(!is.null(res.sco)) {
+
+    agedCareIdsSco <- fread(res.sco, select=c("eid", "factype")) %>%
+      .[factype == 7, eid] %>%
+      unique
+
+  }
+
+  agedCareIdsAlt <- c(get0("agedCareIdsEng"), get0("agedCareIdsWal"), get0("agedCareIdsSco")) %>%
+      unique
+
+
   phe[, "inAgedCare"] <- case_when(phe$ID %in% agedCareIds ~ 1,
-                    phe$ID %in% noAgedCareIds ~ 0,
-                    T ~ NA_real_)
+                          phe$ID %in% agedCareIdsAlt ~ 1,
+                          phe$ID %in% noAgedCareIds ~ 0,
+                          T ~ NA_real_)
+
 
    # user specified custom fields
   if(!is.null(fields)) {
