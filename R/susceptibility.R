@@ -1,3 +1,21 @@
+#' Create phenotypes for "susceptibility"
+#'
+#' @param res.eng
+#' @param res.wal
+#' @param res.sco
+#' @param cov.file
+#' @param Date
+#' @param out.name
+#'
+#' @return
+#' @export COVID19.susceptibility
+#'
+#' @examples
+#'
+#' @import data.table
+#' @importFrom magrittr %>%
+#' @import tidyverse
+
 ### summarize result file
 susceptibility.summary <- function(res.eng, res.wal, res.sco, Date=NULL, out.name=NULL){
 
