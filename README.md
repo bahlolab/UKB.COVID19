@@ -86,51 +86,6 @@ cov.file <- "covariate.txt"
 res <- COVID19.susceptibility(res.eng, res.wal, res.sco, cov.file)
 ```
 
-## Association Test
-
-Function: `log.cov(data, phe.name, cov.name = c("sex","age","bmi"), asso.output = NULL)`
-
-Association tests using logistic regression model.
-
-Arguments:
-- `data`: the output from COVID19.susceptibility, COVID19.mortality, or COVID19.severity.
-- `phe.name`: "pos.neg", "pos.ppl", "mortality", "hosp", "severe.lev2", or "severe.lev3".
-- `cov.name`: select among: "sex", "age", "bmi", "SES", "black", "asian", "other.ppl", "mixed", "O", "AB", "A", "inAgedCare". "black", "asian", "other.ppl", "mixed" are dummy variables comparing to white British. "O", "AB", "A" are dummy variables comparing to blood group B. By default, cov.name = c("sex","age","bmi"), covariates include sex, age and BMI.
-- `asso.ouput`: generate a csv file including association test results (estimate, odds ratio and p-value). by default, asso.output=NULL, it doesn’t generate an output file. 
-
-Note: participants with missing values in the result or the covariates included in the association test will be omitted.
-
-#### Example
-
-Association test of susceptibility (positive vs negative) 
-```r
-log.cov(data=res$tested, phe.name="pos.neg", 
-  cov.name=c("sex","age","bmi","SES","smoke","asian","other.ppl","inAgedCare"), 
-  asso.output = "pos.neg")
-```
-
-Association test of susceptibility (positive vs population) 
-```r
-log.cov(data=res$population, phe.name="pos.ppl", 
-  cov.name=c("sex","age","bmi","SES","smoke","black","asian","other.ppl","A","inAgedCare"), 
-  asso.output = "pos.ppl")
-```
-
-Association test of susceptibility for white British only 
-```r
-tested <- res$tested
-res.white <- tested[tested$white == 1 & !(is.na(tested$white)),]
-log.cov(data=res.white, phe.name="pos.neg", 
-  cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"),
-  asso.output = "white.pos.neg")
-
-ppl <- res$population
-ppl.white <- ppl[ppl$white == 1 & !(is.na(ppl$white)),]
-log.cov(data=ppl.white, phe.name="pos.neg", 
-  cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"),
-  asso.output = "white.pos.ppl")
-```
-
 ## Mortality
 
 Function: `COVID19.mortality(res.file, death.file, death.cause.file, cov.file, Date=NULL, out.name=NULL)`
@@ -312,3 +267,48 @@ cormorbidity.file <- "comorbidity_1991-04-18_2019-04-01.RData"
 res.file <- "/stornext/HPCScratch/home/wang.lo/CoVID-19/test/mortality_2020-12-18.txt"
 comorbidity.asso(res.file, cormorbidity.file, population="white", covars=c("sex","age","bmi","SES","smoke","inAgedCare"), phe.name="mortality")
 ```
+## Association Test
+
+Function: `log.cov(data, phe.name, cov.name = c("sex","age","bmi"), asso.output = NULL)`
+
+Association tests using logistic regression model.
+
+Arguments:
+- `data`: the output from COVID19.susceptibility, COVID19.mortality, or COVID19.severity.
+- `phe.name`: "pos.neg", "pos.ppl", "mortality", "hosp", "severe.lev2", or "severe.lev3".
+- `cov.name`: select among: "sex", "age", "bmi", "SES", "black", "asian", "other.ppl", "mixed", "O", "AB", "A", "inAgedCare". "black", "asian", "other.ppl", "mixed" are dummy variables comparing to white British. "O", "AB", "A" are dummy variables comparing to blood group B. By default, cov.name = c("sex","age","bmi"), covariates include sex, age and BMI.
+- `asso.ouput`: generate a csv file including association test results (estimate, odds ratio and p-value). by default, asso.output=NULL, it doesn’t generate an output file. 
+
+Note: participants with missing values in the result or the covariates included in the association test will be omitted.
+
+#### Example
+
+Association test of susceptibility (positive vs negative) 
+```r
+log.cov(data=res$tested, phe.name="pos.neg", 
+  cov.name=c("sex","age","bmi","SES","smoke","asian","other.ppl","inAgedCare"), 
+  asso.output = "pos.neg")
+```
+
+Association test of susceptibility (positive vs population) 
+```r
+log.cov(data=res$population, phe.name="pos.ppl", 
+  cov.name=c("sex","age","bmi","SES","smoke","black","asian","other.ppl","A","inAgedCare"), 
+  asso.output = "pos.ppl")
+```
+
+Association test of susceptibility for white British only 
+```r
+tested <- res$tested
+res.white <- tested[tested$white == 1 & !(is.na(tested$white)),]
+log.cov(data=res.white, phe.name="pos.neg", 
+  cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"),
+  asso.output = "white.pos.neg")
+
+ppl <- res$population
+ppl.white <- ppl[ppl$white == 1 & !(is.na(ppl$white)),]
+log.cov(data=ppl.white, phe.name="pos.neg", 
+  cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"),
+  asso.output = "white.pos.ppl")
+```
+
