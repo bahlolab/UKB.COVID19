@@ -88,7 +88,7 @@ res <- COVID19.susceptibility(res.eng, res.wal, res.sco, cov.file)
 
 ## Mortality
 
-Function: `COVID19.mortality(res.file, death.file, death.cause.file, cov.file, Date=NULL, out.name=NULL)`
+Function: `COVID19.mortality(res.eng, res.wal=NULL, res.sco=NULL, death.file, death.cause.file, cov.file, Date=NULL, out.name=NULL)`
 
 The definition of mortality: participants with COVID-19 as primary death cause vs the other participants with positive COVID-19 test results.
 
