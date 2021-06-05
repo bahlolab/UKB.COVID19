@@ -46,7 +46,7 @@ susceptibility.summary <- function(res.eng, res.wal=NULL, res.sco=NULL, Date=NUL
 }
 
 # add covariates
-COVID19.susceptibility <- function(res.eng, res.wal, res.sco, cov.file, Date=NULL, out.name=NULL){
+COVID19.susceptibility <- function(res.eng, res.wal=NULL, res.sco=NULL, cov.file, Date=NULL, out.name=NULL){
   # covariates
   cov <- read.table(cov.file,header = T,stringsAsFactors = F,sep = "\t")
   # test results
