@@ -41,6 +41,7 @@ Arguments:
 - `res.wal`: Latest covid result file/files for Wales. Only available for downloads after April 2021.
 - `res.sco`: Latest covid result file/files for Scotland. Only available for downloads after April 2021.
 - `out.file`: Name of covariate file to be outputted. By default, out.file = NULL, “covariate.txt”.
+
 Outputs covariate file, used for input for other functions. Automatically returns sex, age at birthday in 2020, SES, self-reported ethnicity, most recently reported BMI, most recently reported pack-years, whether they reside in aged care (based on hospital admissions data, and covid test data) and blood type. Function also allows user to specify fields of interest (field codes, provided by UK Biobank), and allows the users to specify more intuitive names, for selected fields.
 #### Example
 ```r
