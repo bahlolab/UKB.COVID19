@@ -28,6 +28,37 @@ library(tidyverse)
 library(magrittr)
 ```
 
+## Risk Factor
+
+Function: `risk.factor(ukb.data, ABO.data, hesin.file, res.eng, res.wal = NULL, res.sco = NULL, fields = NULL, field.names = NULL, out.file = NULL)`
+
+This function formats and outputs a covariate file, used for input for other functions.
+
+Arguments:
+#' @param hesin.file Latest yyyymmdd_hesin.txt file.
+#' @param fields User specified field codes from ukb.data file.
+#' @param field.names User specified field names.
+#' @param out.file 
+
+- `ukb.data`: tab delimited UK Biobank phenotype file.
+- `ABO.data`: Latest yyyymmdd_covid19_misc.txt file.
+- `res.eng`: Latest covid result file/files for England.
+- `res.wal`: Latest covid result file/files for Wales. Only available for downloads after April 2021.
+- `res.sco`: Latest covid result file/files for Scotland. Only available for downloads after April 2021.
+- `out.file`: Name of covariate file to be outputted. By default, out.file = NULL, “covariate.txt”.
+Outputs covariate file, used for input for other functions. Automatically returns sex, age at birthday in 2020, SES, self-reported ethnicity, most recently reported BMI, most recently reported pack-years, whether they reside in aged care (based on hospital admissions data, and covid test data) and blood type. Function also allows user to specify fields of interest (field codes, provided by UK Biobank), and allows the users to specify more intuitive names, for selected fields.
+#### Example
+```r
+ukb.data <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/data/app36610/rawPheno/ukb42082.tab"
+ABO.data <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20200814_covid19_misc.txt"
+hesin.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210502_hesin.txt"
+res.eng <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210426_covid19_result_england.txt"
+res.wal <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210426_covid19_result_wales.txt"
+res.sco <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210426_covid19_result_scotland.txt"
+
+risk.factor(ukb.data, ABO.data, hesin.file, res.eng, res.wal, res.sco)
+```
+
 ## Susceptibility
 
 Function: `COVID19.susceptibility(res.eng, res.wal=NULL, res.sco=NULL, cov.file, Date=NULL, out.name=NULL)`
@@ -55,6 +86,7 @@ res.eng <- "20210426_covid19_result_england.txt"
 res.wal <- "20210426_covid19_result_wales.txt"
 res.sco <- "20210426_covid19_result_scotland.txt"
 cov.file <- "covariate.txt"
+
 res <- COVID19.susceptibility(res.eng, res.wal, res.sco, cov.file)
 ```
 
