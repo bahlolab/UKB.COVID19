@@ -45,12 +45,12 @@ Arguments:
 Outputs covariate file, used for input for other functions. Automatically returns sex, age at birthday in 2020, SES, self-reported ethnicity, most recently reported BMI, most recently reported pack-years, whether they reside in aged care (based on hospital admissions data, and covid test data) and blood type. Function also allows user to specify fields of interest (field codes, provided by UK Biobank), and allows the users to specify more intuitive names, for selected fields.
 #### Example
 ```r
-ukb.data <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/data/app36610/rawPheno/ukb42082.tab"
-ABO.data <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20200814_covid19_misc.txt"
-hesin.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210502_hesin.txt"
-res.eng <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210426_covid19_result_england.txt"
-res.wal <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210426_covid19_result_wales.txt"
-res.sco <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210426_covid19_result_scotland.txt"
+ukb.data <- "ukb42082.tab"
+ABO.data <- "20200814_covid19_misc.txt"
+hesin.file <- "20210502_hesin.txt"
+res.eng <- "20210426_covid19_result_england.txt"
+res.wal <- "20210426_covid19_result_wales.txt"
+res.sco <- "20210426_covid19_result_scotland.txt"
 
 risk.factor(ukb.data, ABO.data, hesin.file, res.eng, res.wal, res.sco)
 ```
