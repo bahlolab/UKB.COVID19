@@ -35,11 +35,6 @@ Function: `risk.factor(ukb.data, ABO.data, hesin.file, res.eng, res.wal = NULL, 
 This function formats and outputs a covariate file, used for input for other functions.
 
 Arguments:
-#' @param hesin.file Latest yyyymmdd_hesin.txt file.
-#' @param fields User specified field codes from ukb.data file.
-#' @param field.names User specified field names.
-#' @param out.file 
-
 - `ukb.data`: tab delimited UK Biobank phenotype file.
 - `ABO.data`: Latest yyyymmdd_covid19_misc.txt file.
 - `res.eng`: Latest covid result file/files for England.
