@@ -1,7 +1,7 @@
 Package: UKB.COVID19
 Type: Package
 Title: UK Biobank COVID-19 data processing and risk factor association tests
-Version: 1.0.0
+Version: 0.1.0
 Authors@R: 
 	person(given = "Longfei", 
 		family = "Wang", 
