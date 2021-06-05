@@ -30,7 +30,7 @@ library(magrittr)
 
 ## Susceptibility
 
-Function: `COVID19.susceptibility(res.eng, res.wal, res.sco, cov.file, Date=NULL, out.name=NULL)`
+Function: `COVID19.susceptibility(res.eng, res.wal=NULL, res.sco=NULL, cov.file, Date=NULL, out.name=NULL)`
 
 Definitions of COVID-19 susceptibility: 
 - pos.neg: COVID-19 positive vs negative; 
