@@ -86,6 +86,20 @@ cov.file <- "covariate.txt"
 res <- COVID19.susceptibility(res.eng, res.wal, res.sco, cov.file)
 ```
 
+Association test
+```r
+table(res$tested$pos.neg)
+log.cov(data=res$tested, phe.name="pos.neg", cov.name=c("sex","age","bmi","SES","smoke","black","asian","other.ppl","O","inAgedCare"), asso.output = "pos.neg")
+```
+
+Association test for white British only 
+```r
+tested <- res$tested
+res.white <- tested[tested$white == 1 & !(is.na(tested$white)),]
+table(res.white$pos.neg)
+log.cov(data=res.white, phe.name="pos.neg", cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"),asso.output = "white.pos.neg")
+```
+
 ## Mortality
 
 Function: `COVID19.mortality(res.eng, res.wal=NULL, res.sco=NULL, death.file, death.cause.file, cov.file, Date=NULL, out.name=NULL)`
@@ -93,37 +107,40 @@ Function: `COVID19.mortality(res.eng, res.wal=NULL, res.sco=NULL, death.file, de
 The definition of mortality: participants with COVID-19 as primary death cause vs the other participants with positive COVID-19 test results.
 
 Arguments:
-- `res.file`: the file name of the COVID-19 test result date from UKB.
-- `death.file`: the file name of the death records from UKB.
-- `death.cause.file`: the file name of the death cause data from UKB.
-- `cov.file`: the file name of the covariate data.
-- `Date`:  select the results until a certain date. The date shouldn’t be later than the latest testing date or the latest death information date. By default, Date = NULL, the latest testing date if the death information date is more recent, and vice versa. For example, the latest testing date is 18/01/2021 and the latest death information released date is 18/12/2020. If we set Date = NULL, the function will select both data generated until 18/12/2020. Since all data are updated at the different frequency. To combine different datasets, we need to make sure the time period consistent. The date format has to be %d/%m/%Y.
-- `out.name`: output file name. By default, out.name = NULL, “mortality_{Date}.txt”.
+- `res.eng`: Latest covid result file/files for England.
+- `res.wal`: Latest covid result file/files for Wales. Only available for downloads after April 2021.
+- `res.sco`: Latest covid result file/files for Scotland. Only available for downloads after April 2021.
+- `death.file`: Latest death register file.
+- `death.cause.file`: Latest death cause file
+- `cov.file`: Covariate file generated using risk.factor function.
+- `Date`:  Date, ddmmyyyy, select the results until a certain date. By default, Date = NULL, the latest death register date.  
+- `out.name`: Name of mortality file to be outputted. By default, out.name = NULL, “mortality_{Date}.txt”.
 
 #### Example
 
 ```r
-res.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210120_covid19_result.txt"
-death.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210121_death.txt"
-death.cause.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210121_death_cause.txt"
-cov.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/covariate.v0.txt"
+res.eng <- "20210426_covid19_result_england.txt"
+res.wal <- "20210426_covid19_result_wales.txt"
+res.sco <- "20210426_covid19_result_scotland.txt"
+cov.file <- "covariate.txt"
+death.file <- "20210408_death.txt"
+death.cause.file <- "20210408_death_cause.txt"
 
-mortality <- COVID19.mortality(res.file, death.file, death.cause.file, cov.file)
+mortality <- COVID19.mortality(res.eng, res.wal, res.sco, death.file, death.cause.file, cov.file)
 ```
 
 Association test
 ```r
-log.cov(data=mortality, phe.name="mortality",
-  cov.name=c("sex","age","bmi","SES","smoke","black","inAgedCare"), 
-  asso.output = "mortality1")
+table(mortality$mortality)
+log.cov(data=mortality, phe.name="mortality", cov.name=c("sex","age","bmi","O","AB","A"))
+log.cov(data=mortality, phe.name="mortality", cov.name=c("sex","age","bmi","black","asian","other.ppl","mixed"))
 ```
 
 Association test for white British only 
 ```r
 mortality.white <- mortality[mortality$white == 1 & !(is.na(mortality$white)),]
-log.cov(data=mortality.white, phe.name="mortality", 
-  cov.name=c("sex","age","bmi","smoke","inAgedCare"),  
-  asso.output = "white.mortality1")
+table(mortality.white$mortality)
+log.cov(data=mortality.white, phe.name="mortality", cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"),  asso.output = "white.mortality")
 ```
 
 ## Severity
