@@ -90,7 +90,7 @@ res <- COVID19.susceptibility(res.eng, res.wal, res.sco, cov.file)
 Association test
 ```r
 table(res$tested$pos.neg)
-log.cov(data=res$tested, phe.name="pos.neg", cov.name=c("sex","age","bmi","SES","smoke","black","asian","other.ppl","O","inAgedCare"), asso.output = "pos.neg")
+log_cov(data=res$tested, phe.name="pos.neg", cov.name=c("sex","age","bmi","SES","smoke","black","asian","other.ppl","O","inAgedCare"), asso.output = "pos.neg")
 ```
 
 Association test for white British only 
@@ -98,7 +98,7 @@ Association test for white British only
 tested <- res$tested
 res.white <- tested[tested$white == 1 & !(is.na(tested$white)),]
 table(res.white$pos.neg)
-log.cov(data=res.white, phe.name="pos.neg", cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"),asso.output = "white.pos.neg")
+log_cov(data=res.white, phe.name="pos.neg", cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"),asso.output = "white.pos.neg")
 ```
 
 ## Mortality
@@ -133,15 +133,15 @@ mortality <- COVID19.mortality(res.eng, res.wal, res.sco, death.file, death.caus
 Association test
 ```r
 table(mortality$mortality)
-log.cov(data=mortality, phe.name="mortality", cov.name=c("sex","age","bmi","O","AB","A"))
-log.cov(data=mortality, phe.name="mortality", cov.name=c("sex","age","bmi","black","asian","other.ppl","mixed"))
+log_cov(data=mortality, phe.name="mortality", cov.name=c("sex","age","bmi","O","AB","A"))
+log_cov(data=mortality, phe.name="mortality", cov.name=c("sex","age","bmi","black","asian","other.ppl","mixed"))
 ```
 
 Association test for white British only 
 ```r
 mortality.white <- mortality[mortality$white == 1 & !(is.na(mortality$white)),]
 table(mortality.white$mortality)
-log.cov(data=mortality.white, phe.name="mortality", cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"),  asso.output = "white.mortality")
+log_cov(data=mortality.white, phe.name="mortality", cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"),  asso.output = "white.mortality")
 ```
 
 ## Severity
@@ -190,19 +190,19 @@ severity <- COVID19.severity(res.eng, res.wal, res.sco, death.file, death.cause.
 Association test of hospitalizatiopn
 ```r
 table(severity$hosp)
-log.cov(data=severity, phe.name="hosp", cov.name=c("sex","age","bmi","inAgedCare"))
+log_cov(data=severity, phe.name="hosp", cov.name=c("sex","age","bmi","inAgedCare"))
 ```
 
 Association test of severity level 2
 ```r
 table(severity$severe.lev2)
-log.cov(data=severity, phe.name="severe.lev2", cov.name=c("sex","age","bmi","O","AB","A"))
+log_cov(data=severity, phe.name="severe.lev2", cov.name=c("sex","age","bmi","O","AB","A"))
 ```
 
 Association test of severity level 3
 ```r
 table(severity$severe.lev3)
-log.cov(data=severity, phe.name="severe.lev3", cov.name=c("sex","age","bmi","SES"))
+log_cov(data=severity, phe.name="severe.lev3", cov.name=c("sex","age","bmi","SES"))
 ```
 
 Association test for white British only
@@ -212,11 +212,11 @@ table(severity.white$hosp)
 table(severity.white$severe.lev2)
 table(severity.white$severe.lev3)
 
-log.cov(data=severity.white, phe.name="hosp", cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"), asso.output = "white.hosp")
+log_cov(data=severity.white, phe.name="hosp", cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"), asso.output = "white.hosp")
 
-log.cov(data=severity.white, phe.name="severe.lev2", cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"), asso.output = "white.sev.lev2")
+log_cov(data=severity.white, phe.name="severe.lev2", cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"), asso.output = "white.sev.lev2")
 
-log.cov(data=severity.white, phe.name="severe.lev3", cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"), asso.output = "white.sev.lev3")
+log_cov(data=severity.white, phe.name="severe.lev3", cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"), asso.output = "white.sev.lev3")
 ```
 
 ## Co-morbidity Summary
@@ -275,7 +275,7 @@ comorbidity.asso(res.file, cormorbidity.file, population="white", covars=c("sex"
 
 ## Association Test
 
-Function: `log.cov(data, phe.name, cov.name = c("sex","age","bmi"), asso.output=NULL)`
+Function: `log_cov(data, phe.name, cov.name = c("sex","age","bmi"), asso.output=NULL)`
 
 Association tests using logistic regression model.
 
@@ -291,14 +291,14 @@ Note: participants with missing values in the result or the covariates included 
 
 Association test of susceptibility (positive vs negative) 
 ```r
-log.cov(data=res$tested, phe.name="pos.neg", 
+log_cov(data=res$tested, phe.name="pos.neg", 
   cov.name=c("sex","age","bmi","SES","smoke","asian","other.ppl","inAgedCare"), 
   asso.output = "pos.neg")
 ```
 
 Association test of susceptibility (positive vs population) 
 ```r
-log.cov(data=res$population, phe.name="pos.ppl", 
+log_cov(data=res$population, phe.name="pos.ppl", 
   cov.name=c("sex","age","bmi","SES","smoke","black","asian","other.ppl","A","inAgedCare"), 
   asso.output = "pos.ppl")
 ```
@@ -307,13 +307,13 @@ Association test of susceptibility for white British only
 ```r
 tested <- res$tested
 res.white <- tested[tested$white == 1 & !(is.na(tested$white)),]
-log.cov(data=res.white, phe.name="pos.neg", 
+log_cov(data=res.white, phe.name="pos.neg", 
   cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"),
   asso.output = "white.pos.neg")
 
 ppl <- res$population
 ppl.white <- ppl[ppl$white == 1 & !(is.na(ppl$white)),]
-log.cov(data=ppl.white, phe.name="pos.neg", 
+log_cov(data=ppl.white, phe.name="pos.neg", 
   cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"),
   asso.output = "white.pos.ppl")
 ```
