@@ -219,73 +219,60 @@ log.cov(data=severity.white, phe.name="severe.lev2", cov.name=c("sex","age","bmi
 log.cov(data=severity.white, phe.name="severe.lev3", cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"), asso.output = "white.sev.lev3")
 ```
 
-## Co-morbidity
+## Co-morbidity Summary
 
-Function: `comorbidity.summary(hesin.file, hesin_diag.file, cov.file, primary=FALSE, ICD10.file="./data/ICD10.coding19.tsv", Date.start=NULL, Date.end=NULL)`
+Function: `comorbidity.summary(hesin.file, hesin_diag.file, cov.file, primary=FALSE, ICD10.file, Date.start=NULL, Date.end=NULL)`
 
-Summarise co-morbidity information based on HES data and the given time period. 
+Summarise co-morbidity information based on HESIN data and the given time period. 
 
 Arguments:
-- `hesin.file`: the file name of the HES inpatient core dataset from UKB.
-- `hesin_diag.file`: the file name of the HES inpatient diagnosis date from UKB.
-- `cov.file`: the file name of the covariate data.
-- `primary`: if only the primary diagnoses will be included in the analysis. By default, primary=FALSE, all diagoses will be inlcuded.
-- `ICD10.file`: ICD10 coding file for the diagnosis data.
-- `Date.start`: the start date of the selcted time period.
-- `Date.end`: the end date of the selecte time period.
+- `hesin.file`: Latest hospital inpatient master file.
+- `hesin_diag.file`: Latest hospital inpatient diagnosis file.
+- `cov.file`: Covariate file generated using risk.factor function.
+- `primary`: TRUE: include primary diagnosis only; FALSE: include all diagnoses.
+- `ICD10.file`: The ICD10 code file, which is included in the package, and also can be download from https://github.com/bahlolab/UKB.COVID19/blob/main/data/ICD10.coding19.tsv.
+- `Date.start`: Date, ddmmyyyy, select the start date of hospital inpatient record period. 
+- `Date.end`: Date, ddmmyyyy, select the end date of hospital inpatient record period. 
+
+Outputs comorbidity summary file, named comorbidity_<Date.start>_<Date.end>.RData, including phenotype, non-genetic risk factors and all comorbidities, which will be used in the comorbidity association tests.
 
 #### Example
 
 ```r
-hesin.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210122_hesin.txt"
-hesin_diag.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210122_hesin_diag.txt"
-cov <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/covariate.v0.txt"
-ICD10 <- "/stornext/Home/data/allstaff/w/wang.lo/hpc_home/CoVID-19/data/ICD10.coding19.tsv"
+hesin.file <- "20210502_hesin.txt"
+hesin_diag.file <- "20210502_hesin_diag.txt"
+cov <- "covariate.txt"
+ICD10.file <- "ICD10.coding19.tsv"
 
-comorbidity.summary(hesin.file, hesin_diag.file, cov.file=cov, ICD10.file=ICD10, Date.end="01/04/2019")
-# set the end of Date as the first test day, to exclude the morbidities caused by CoVID-19
+comorbidity.summary(hesin.file, hesin_diag.file, cov.file=cov, ICD10.file=ICD10.file, primary = F, Date.end="16/03/2020")
+comorbidity.summary(hesin.file, hesin_diag.file, cov.file=cov, ICD10.file=ICD10.file, primary = F, Date.start="16/03/2020")
 ```
 
-Function: `comorbidity.asso(res.file, comorbidity.file, population = "all", covars=c("sex","age","bmi"), phe.name, output=NULL)`
+## Co-morbidity Association Tests
+
+Function: `comorbidity.asso(res.file, cormorbidity.file, population = "all", covars=c("sex","age","bmi"), phe.name, output=NULL)`
 
 Association tests between each co-morbidity and given phenotype (susceptibility, mortality or severity) with the adjustment of covariates. 
 
 Arguments:
-- `res.file`: the test results file name.
-- `comorbidity.file`: the comorbidity file generated from function `comorbidity.summary`.
-- `population`: the selected population/ethnic group. By default, population="all", include all ethnic groups.
-- `covars`: the covariates included in the analysis.
-- `phe.name`: phenotype name.
-- `output`: the output file name. By default, output=NULL, it is {population}_{phenotype name}_comorbidity_asso.csv.
+- `res.file`: Result summary file generated from `COVID19.susceptibility`, `COVID19.severity` or `COVID19.mortality`.
+- `comorbidity.file`: Comorbidity summary file generated from `comorbidity.summary`. 
+- `population`: Choose self-report population/ethnic background group from "all", white", "black", "asian", "mixed", or "other". By default, population="all", include all ethnic groups.
+- `covars`: Selected covariates names. By default, covars=c("sex","age","bmi"), covariates are sex age and BMI.
+- `phe.name`: Phenotype name.
+- `output`: Name of comorbidity association test result file to be outputted. By default, output=NULL, it is {population}_{phenotype name}_comorbidity_asso.csv.
 
 #### Example
 
-white British, severity vs co-morbidity
 ```r
-res.file <- "severity_2020-12-09.txt"
-cormorbidity.file <- "comorbidity_1991-04-18_2019-04-01.RData"
-comorbidity.asso(res.file, cormorbidity.file, population="white", covars=c("sex","age","bmi","SES","smoke","inAgedCare"), phe.name="hosp")
-comorbidity.asso(res.file, cormorbidity.file, population="white", covars=c("sex","age","bmi","SES","smoke","inAgedCare"), phe.name="severe.lev2")
-comorbidity.asso(res.file, cormorbidity.file, population="white", covars=c("sex","age","bmi","SES","smoke","inAgedCare"), phe.name="severe.lev3")
+res.file <- "severity_2021-02-05.txt"
+cormorbidity.file <- "comorbidity_1991-04-18_2020-03-16.RData"
+comorbidity.asso(res.file, cormorbidity.file, population="white", covars=c("sex","age","bmi","SES","smoke","inAgedCare"), phe.name="severe.lev2", output = "lev2_bf.csv")
+
+cormorbidity.file <- "comorbidity_2020-03-16_2021-02-05.RData"
+comorbidity.asso(res.file, cormorbidity.file, population="white", covars=c("sex","age","bmi","SES","smoke","inAgedCare"), phe.name="severe.lev2", output = "lev2_af.csv")
 ```
 
-white British, susceptibility vs co-morbidity
-```r
-cormorbidity.file <- "comorbidity_1991-04-18_2019-04-01.RData"
-res.file <- "/stornext/HPCScratch/home/wang.lo/CoVID-19/test/result_2021-01-18.txt"
-comorbidity.asso(res.file, cormorbidity.file, population="white", covars=c("sex","age","bmi","SES","smoke","inAgedCare"), phe.name="result")
-res.file <- "/stornext/HPCScratch/home/wang.lo/CoVID-19/test/susceptibility.tested.txt"
-comorbidity.asso(res.file, cormorbidity.file, population="white", covars=c("sex","age","bmi","SES","smoke","inAgedCare"), phe.name="pos.neg")
-res.file <- "/stornext/HPCScratch/home/wang.lo/CoVID-19/test/susceptibility.population.txt"
-comorbidity.asso(res.file, cormorbidity.file, population="white", covars=c("sex","age","bmi","SES","smoke","inAgedCare"), phe.name="pos.ppl")
-```
-
-white British, mortality vs co-morbidity
-```r
-cormorbidity.file <- "comorbidity_1991-04-18_2019-04-01.RData"
-res.file <- "/stornext/HPCScratch/home/wang.lo/CoVID-19/test/mortality_2020-12-18.txt"
-comorbidity.asso(res.file, cormorbidity.file, population="white", covars=c("sex","age","bmi","SES","smoke","inAgedCare"), phe.name="mortality")
-```
 ## Association Test
 
 Function: `log.cov(data, phe.name, cov.name = c("sex","age","bmi"), asso.output = NULL)`
