@@ -43,6 +43,7 @@ Arguments:
 - `out.file`: Name of covariate file to be outputted. By default, out.file = NULL, “covariate.txt”.
 
 Outputs covariate file, used for input for other functions. Automatically returns sex, age at birthday in 2020, SES, self-reported ethnicity, most recently reported BMI, most recently reported pack-years, whether they reside in aged care (based on hospital admissions data, and covid test data) and blood type. Function also allows user to specify fields of interest (field codes, provided by UK Biobank), and allows the users to specify more intuitive names, for selected fields.
+
 #### Example
 ```r
 ukb.data <- "ukb42082.tab"
@@ -145,76 +146,77 @@ log.cov(data=mortality.white, phe.name="mortality", cov.name=c("sex","age","bmi"
 
 ## Severity
 
-Function: `COVID19.severity(res.file, death.file, death.cause.file, hesin.file, hesin_diag.file, hesin_oper.file, hesin_critical.file, cov.file, code.file= "./data/coding240.tsv", Date=NULL, out.name=NULL)`
+Function: `COVID19.severity(res.eng, res.wal=NULL, res.sco=NULL, death.file, death.cause.file, hesin.file, hesin_diag.file, hesin_oper.file, hesin_critical.file, cov.file= "./data/covariate.v0.txt", code.file= "./data/coding240.tsv", Date=NULL, out.name=NULL)`
 
 Four definitions of severity:
 - hospitalization
-- severity level 2
-- severity level 3
+- critial care
+- advanced critical care
 
 Arguments:
-- `res.file`: the file name of the COVID-19 test result date from UKB.
-- `death.file`: the file name of the death records from UKB.
-- `death.cause.file`: the file name of the death cause data from UKB.
-- `hesin.file`: the file name of the HES inpatient core dataset from UKB.
-- `hesin_diag.file`: the file name of the HES inpatient diagnosis date from UKB.
-- `hesin_oper.file`: the file name of the HES inpatient operation date from UKB.
-- `hesin_critical.file`: the file name of the HES inpatient critical care data from UKB.
-- `cov.file`: the name of the covariate file.
-- `code.file`: the name of the coding 240 file for operation catagory.
-- `Date`:  select the results until a certain date. The date shouldn’t be later than the latest testing date, the latest death information date or the latest hospitalisation information date. By default, Date = NULL, the latest date for all release datasets. The date format has to be %d/%m/%Y.
-- `out.name`: output file name. By default, out.name = NULL, “mortality_{Date}.txt”.
+- `res.eng`: Latest covid result file/files for England.
+- `res.wal`: Latest covid result file/files for Wales. Only available for downloads after April 2021.
+- `res.sco`: Latest covid result file/files for Scotland. Only available for downloads after April 2021.
+- `death.file`: Latest death register file.
+- `death.cause.file`: Latest death cause file
+- `hesin.file`: Latest hospital inpatient master file.
+- `hesin_diag.file`: Latest hospital inpatient diagnosis file.
+- `hesin_oper.file`: Latest hospital inpatient operation file.
+- `hesin_critical.file`: Latest hospital inpatient critical care file.
+- `code.file`: The operation code file, which is included in the package, and also can be download from https://github.com/bahlolab/UKB.COVID19/blob/main/data/coding240.tsv.
+- `cov.file`: Covariate file generated using risk.factor function.
+- `Date`:  Date, ddmmyyyy, select the results until a certain date. By default, Date = NULL, the latest hospitalization date.  
+- `out.name`: Name of severity files to be outputted. By default, out.name = NULL, “severity_{Date}.txt”.
+
 
 #### Example
 
 ```r
-res.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210120_covid19_result.txt"
-death.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210121_death.txt"
-death.cause.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210121_death_cause.txt"
-hesin.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210122_hesin.txt"
-hesin_diag.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210122_hesin_diag.txt"
-hesin_oper.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210122_hesin_oper.txt"
-hesin_critical.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/20210122_hesin_critical.txt"
-cov.file <- "/wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/COVID19/phenotypes/covariate.v0.txt"
-code.file <- "/stornext/Home/data/allstaff/w/wang.lo/hpc_home/CoVID-19/data/coding240.tsv"
+res.eng <- "20210426_covid19_result_england.txt"
+res.wal <- "20210426_covid19_result_wales.txt"
+res.sco <- "20210426_covid19_result_scotland.txt"
+death.file <- "20210408_death.txt"
+death.cause.file <- "20210408_death_cause.txt"
+hesin.file <- "20210502_hesin.txt"
+hesin_diag.file <- "20210502_hesin_diag.txt"
+hesin_oper.file <- "20210502_hesin_oper.txt"
+hesin_critical.file <- "20210222_hesin_critical.txt"
+cov.file <- "covariate.txt"
+code.file <- "coding240.tsv"
 
-
-severity <- COVID19.severity(res.file, death.file, death.cause.file, hesin.file, hesin_diag.file, hesin_oper.file, hesin_critical.file, cov.file, code.file)
+severity <- COVID19.severity(res.eng, res.wal, res.sco, death.file, death.cause.file, hesin.file, hesin_diag.file, hesin_oper.file, hesin_critical.file, cov.file, code.file)
 ```
 
 Association test of hospitalizatiopn
 ```r
-log.cov(data=severity, phe.name="hosp", 
-  cov.name=c("sex","age","bmi","SES","smoke","black","asian"), 
-  asso.output = "hosp")
+table(severity$hosp)
+log.cov(data=severity, phe.name="hosp", cov.name=c("sex","age","bmi","inAgedCare"))
 ```
 
 Association test of severity level 2
 ```r
-log.cov(data=severity, phe.name="severe.lev2", 
-  cov.name=c("sex","age","bmi","SES","smoke","black","asian","inAgedCare"), 
-  asso.output = "sev.lev2")
+table(severity$severe.lev2)
+log.cov(data=severity, phe.name="severe.lev2", cov.name=c("sex","age","bmi","O","AB","A"))
 ```
 
 Association test of severity level 3
 ```r
-log.cov(data=severity, phe.name="severe.lev3", 
-  cov.name=c("sex","age","bmi","smoke","black","asian"), 
-  asso.output = "sev.lev3")
+table(severity$severe.lev3)
+log.cov(data=severity, phe.name="severe.lev3", cov.name=c("sex","age","bmi","SES"))
 ```
 
 Association test for white British only
 ```r
 severity.white <- severity[severity$white == 1 & !(is.na(severity$white)),]
-log.cov(data=severity.white, phe.name="hosp", 
-  cov.name=c("sex","age","bmi","SES","smoke"), 
-  asso.output = "white.hosp")
-log.cov(data=severity.white, phe.name="severe.lev2", 
-  cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"), 
-  asso.output = "white.sev.lev2")
-log.cov(data=severity.white, phe.name="severe.lev3", 
-  cov.name=c("sex","age","bmi","smoke"), 
-  asso.output = "white.sev.lev3")
+table(severity.white$hosp)
+table(severity.white$severe.lev2)
+table(severity.white$severe.lev3)
+
+log.cov(data=severity.white, phe.name="hosp", cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"), asso.output = "white.hosp")
+
+log.cov(data=severity.white, phe.name="severe.lev2", cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"), asso.output = "white.sev.lev2")
+
+log.cov(data=severity.white, phe.name="severe.lev3", cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"), asso.output = "white.sev.lev3")
 ```
 
 ## Co-morbidity
