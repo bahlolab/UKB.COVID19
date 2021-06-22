@@ -19,6 +19,8 @@ data_dir=${working_dir}/data
 scripts_dir=${working_dir}/script
 saige_dir=${working_dir}/SAIGE
 
+plink=~/hpc_home/software/plink
+
 cd ${working_dir}
 
 # ID list
@@ -27,10 +29,6 @@ module load R
 Rscript ~/hpc_home/CoVID-19/ID.list.R
 
 ## run SAIGE - step 1.
-cd ${working_dir}
-
-plink=~/hpc_home/software/plink
-
 $plink --bfile ${ukb_dir}/cleanedEuroData/grmSNPsSubset/grmSNPsEuro \
 --keep ${data_dir}/ID.list \
 --make-bed \
@@ -38,9 +36,7 @@ $plink --bfile ${ukb_dir}/cleanedEuroData/grmSNPsSubset/grmSNPsEuro \
 
 $plink --bfile ${data_dir}/grmSNPsSubset/grmSNPEuro --pca 20 --out ${data_dir}/grmSNPsSubset/pca.20
 
-
 Rscript ~/hpc_home/CoVID-19/phe.pca.R
-
 
 ## Run!
 singularity run ./saige_0.36.3.2.sif step1_fitNULLGLMM.R     \
@@ -55,7 +51,7 @@ singularity run ./saige_0.36.3.2.sif step1_fitNULLGLMM.R     \
         --LOCO=FALSE
 
 
-# step 2
+## run SAIGE - step 2.
 nCh=$(wc -l ${ukb_dir}/geneticDataCleaning/qcFiles/chunks_minMaf0.0001_minInfo0.8.txt | cut -d " " -f 1)
 
 for ch in $(seq 1 $nCh)
