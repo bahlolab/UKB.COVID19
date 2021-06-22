@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --job-name=hosp
-#SBATCH --output=/home/users/allstaff/wang.lo/hpc_home/CoVID-19/hosp.out
+#SBATCH --output=hosp.out
 #SBATCH --time=48:00:00
 #SBATCH --mem-per-cpu=10G
 #SBATCH --nodes=1
@@ -9,10 +9,12 @@
 #SBATCH --mail-user=wang.lo@wehi.edu.au
 
 working_dir=~/hpc_home/CoVID-19/hosp
+# phenotype file generated from COVID19.severity function
 pheno_file=~/hpc_home/CoVID-19/April/severity.cov.txt
 phe_name=hosp
 cov_name=sex,age,bmi,smoke,SES,inAgedCare
 
+ukb_dir=<your UKBB data dir>
 data_dir=${working_dir}/data
 scripts_dir=${working_dir}/script
 saige_dir=${working_dir}/SAIGE
@@ -29,7 +31,7 @@ cd ${working_dir}
 
 plink=~/hpc_home/software/plink
 
-$plink --bfile /wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/data/app36610/cleanedEuroData/grmSNPsSubset/grmSNPsEuro \
+$plink --bfile ${ukb_dir}/cleanedEuroData/grmSNPsSubset/grmSNPsEuro \
 --keep ${data_dir}/ID.list \
 --make-bed \
 --out ${data_dir}/grmSNPsSubset/grmSNPEuro
@@ -54,12 +56,12 @@ singularity run ./saige_0.36.3.2.sif step1_fitNULLGLMM.R     \
 
 
 # step 2
-nCh=$(wc -l /wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/data/app36610/geneticDataCleaning/qcFiles/chunks_minMaf0.0001_minInfo0.8.txt | cut -d " " -f 1)
+nCh=$(wc -l ${ukb_dir}/geneticDataCleaning/qcFiles/chunks_minMaf0.0001_minInfo0.8.txt | cut -d " " -f 1)
 
 for ch in $(seq 1 $nCh)
 do
 
-  read CHR chunk start end < <(sed -n ${ch}p /wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/data/app36610/geneticDataCleaning/qcFiles/chunks_minMaf0.0001_minInfo0.8.txt)
+  read CHR chunk start end < <(sed -n ${ch}p ${ukb_dir}/geneticDataCleaning/qcFiles/chunks_minMaf0.0001_minInfo0.8.txt)
 
   echo 'chrom '$CHR' chunk '$chunk' - '$start' to '$end''
 
@@ -78,12 +80,12 @@ module load gcc
 module unload singularity
 module load singularity/3.3.0
 
-export PATH=\${PATH}:/wehisan/bioinf/lab_bahlo/users/jackson.v/resources/QCTOOL/qctool_v2.0.1-CentOS6.8-x86_64/:/wehisan/bioinf/lab_bahlo/users/jackson.v/resources/bgen/gavinband-bgen-44fcabbc5c38/build/apps/
+export PATH=\${PATH}:/QCTOOL/qctool_v2.0.1-CentOS6.8-x86_64/:/resources/bgen/gavinband-bgen-44fcabbc5c38/build/apps/
 
 cd ${working_dir}
 
 # copy data to scratch
-rsync -av /wehisan/bioinf/lab_bahlo/projects/misc/UKBiobank/data/app36610/cleanedEuroData/imputed/cleanedEuro_chr${CHR}_chunk${chunk}.* ${data_dir}/imputed
+rsync -av ${ukb_dir}/cleanedEuroData/imputed/cleanedEuro_chr${CHR}_chunk${chunk}.* ${data_dir}/imputed
 
 # filter data to only include those in GWAS
 qctool \
