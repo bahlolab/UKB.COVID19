@@ -1,6 +1,7 @@
 #' Perform association tests between phenotype and covariates
 #'
-#' @param data Data generated from COVID19.susceptibility, COVID19.severity or COVID19.mortality.
+#' @param pheno phenotype dataframe - output from makePheno function
+#' @param covariates covariate dataframe - output from risk.factor function.
 #' @param phe.name Phenotype name in the data.
 #' @param cov.name Selected covariate names in the data. By default, cov.name=c("sex","age","bmi"), covariates include sex, age and BMI.
 #' @param asso.output Name of association test result file to be outputted. By default, asso.output=NULL, it returns results but doesn't generate any files.
@@ -9,13 +10,14 @@
 #' @return Outputs association test results with OR, 95% CI, and p-value.
 #' @import questionr
 #' @import stats
-#' @examples 
+#' @examples
 #' res <- read.table(covid_example("res_example.txt.gz"),header = TRUE, sep = "\t")
 #' log_cov(data=res, phe.name="hosp", cov.name=c("sex","age","bmi"))
-#' 
+#'
 
 
-log_cov <- function(data, phe.name, cov.name = c("sex","age","bmi"), asso.output=NULL){
+log_cov <- function(pheno, covariates, phe.name, cov.name = c("sex","age","bmi"), asso.output=NULL){
+  data <- inner_join(pheno, covariates, on="ID")
   y <- data[,c(phe.name,cov.name)]
   y <- na.omit(y)
   colnames(y)[1] <- "phe"
