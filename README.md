@@ -53,7 +53,7 @@ susceptibility <- makePhenotypes(ukb.data="ukb.tab",
                         hesin_critical.file="hesin_critical.txt",
                         code.file="coding240.txt.gz",
                         pheno.type = "susceptibility",
-                        out.name=paste0("./results/susceptibility")
+                        out.name="./results/susceptibility")
 ```
 code.file can be found in UKB.COVID19/inst/extdata/coding240.txt.gz.
 
@@ -91,7 +91,7 @@ severity <- makePhenotypes(ukb.data="ukb.tab",
                         hesin_critical.file="hesin_critical.txt",
                         code.file="coding240.txt.gz",
                         pheno.type = "severity",
-                        out.name="./results/severity"))
+                        out.name="./results/severity")
 ```
 code.file can be found in UKB.COVID19/inst/extdata/coding240.txt.gz.
 
@@ -101,13 +101,14 @@ This is an example which shows you how to generate a file with all comorbidities
 
 ``` r
 # generate comorbidity file
-comorb <- comorbidity.summary(ukb.data=covid_example("sim_ukb.tab.gz"),
-                              hesin.file=covid_example("sim_hesin.txt.gz"), 
-                              hesin_diag.file=covid_example("sim_hesin_diag.txt.gz"), 
-                              ICD10.file=covid_example("ICD10.coding19.txt.gz"),
+comorb <- comorbidity.summary(ukb.data="ukb.tab",
+                              hesin.file="hesin.txt", 
+                              hesin_diag.file="hesin_diag.txt", 
+                              ICD10.file="ICD10.coding19.txt.gz",
                               primary = FALSE,
                               Date.start = "16/03/2020",
-                              outfile=paste0(covid_example("results"),"/comorbidity_2020-3-16.txt"))
+                              outfile="./results/comorbidity_2020-3-16.txt")
+ICD10.file can be found in UKB.COVID19/inst/extdata/ICD10.coding19.txt.gz.
 
 # association tests 
 comorb.asso <- comorbidity.asso(pheno=susceptibility,
@@ -116,9 +117,10 @@ comorb.asso <- comorbidity.asso(pheno=susceptibility,
                                 population="white",
                                 cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"),
                                 phe.name="pos.neg",
-                                ICD10.file=covid_example("ICD10.coding19.txt.gz"),
+                                ICD10.file="ICD10.coding19.txt.gz",
                                 output = "cormorb_pos_neg_asso.csv")
 
 ```
+ICD10.file can be found in UKB.COVID19/inst/extdata/ICD10.coding19.txt.gz.
 
 
