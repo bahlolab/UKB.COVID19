@@ -27,75 +27,33 @@ library(UKB.COVID19)
 
 ## Risk Factor
 
-Function: `risk.factor(ukb.data, ABO.data, hesin.file, res.eng, res.wal = NULL, res.sco = NULL, fields = NULL, field.names = NULL, out.file = NULL)`
+This is a basic example which shows you how to creat a covariate file with risk factors using UKBB main tab data:
 
-This function formats and outputs a covariate file, used for input for other functions.
-
-Arguments:
-- `ukb.data`: tab delimited UK Biobank phenotype file.
-- `ABO.data`: Latest yyyymmdd_covid19_misc.txt file.
-- `res.eng`: Latest covid result file/files for England.
-- `res.wal`: Latest covid result file/files for Wales. Only available for downloads after April 2021.
-- `res.sco`: Latest covid result file/files for Scotland. Only available for downloads after April 2021.
-- `out.file`: Name of covariate file to be outputted. By default, out.file = NULL, “covariate.txt”.
-
-Outputs covariate file, used for input for other functions. Automatically returns sex, age at birthday in 2020, SES, self-reported ethnicity, most recently reported BMI, most recently reported pack-years, whether they reside in aged care (based on hospital admissions data, and covid test data) and blood type. Function also allows user to specify fields of interest (field codes, provided by UK Biobank), and allows the users to specify more intuitive names, for selected fields.
-
-#### Example
 ```r
-ukb.data <- "ukb42082.tab"
-ABO.data <- "20200814_covid19_misc.txt"
-hesin.file <- "20210502_hesin.txt"
-res.eng <- "20210426_covid19_result_england.txt"
-res.wal <- "20210426_covid19_result_wales.txt"
-res.sco <- "20210426_covid19_result_scotland.txt"
-
-risk.factor(ukb.data, ABO.data, hesin.file, res.eng, res.wal, res.sco)
+library(UKB.COVID19)
+covar <- risk.factor(ukb.data=covid_example("sim_ukb.tab.gz"), 
+                         ABO.data=covid_example("sim_covid19_misc.txt.gz"),
+                         hesin.file=covid_example("sim_hesin.txt.gz"),
+                         res.eng=covid_example("sim_result_england.txt.gz"),
+                         out.file=paste0(covid_example("results"),"/covariate"))
 ```
 
 ## Susceptibility
 
-Function: `COVID19.susceptibility(res.eng, res.wal=NULL, res.sco=NULL, cov.file, Date=NULL, out.name=NULL)`
+This is an example which shows you how to generate a file with COVID-19 susceptibility phenotypes:
 
-Definitions of COVID-19 susceptibility: 
-- pos.neg: COVID-19 positive vs negative; 
-- pos.ppl: COVID-19 positive vs population, all the other participants in UKB, including those who got negative test results and people who didn’t get tested yet.
-
-Arguments:
-- `res.eng`: Latest covid result file/files for England.
-- `res.wal`: Latest covid result file/files for Wales. Only available for downloads after April 2021.
-- `res.sco`: Latest covid result file/files for Scotland. Only available for downloads after April 2021.
-- `cov.file`: Covariate file generated using risk.factor function.
-- `Date`:  Date, ddmmyyyy, select the results until a certain date. By default, Date = NULL, the latest testing date. 
-- `out.name`: Name of susceptibility file to be outputted. By default, out.name = NULL, “result_{Date}.txt”.
-output files:
-  - Positive vs negative + covariates.
-  - Positive vs population + covariates.
-
-The output also returns a list including both of the datasets. The output files can be used for SAIGE GWAS analyses directly. 
-
-#### Example
 ```r
-res.eng <- "20210426_covid19_result_england.txt"
-res.wal <- "20210426_covid19_result_wales.txt"
-res.sco <- "20210426_covid19_result_scotland.txt"
-cov.file <- "covariate.txt"
-
-res <- COVID19.susceptibility(res.eng, res.wal, res.sco, cov.file)
-```
-
-Association test
-```r
-table(res$tested$pos.neg)
-log_cov(data=res$tested, phe.name="pos.neg", cov.name=c("sex","age","bmi","SES","smoke","black","asian","other.ppl","O","inAgedCare"), asso.output = "pos.neg")
-```
-
-Association test for white British only 
-```r
-tested <- res$tested
-res.white <- tested[tested$white == 1 & !(is.na(tested$white)),]
-table(res.white$pos.neg)
-log_cov(data=res.white, phe.name="pos.neg", cov.name=c("sex","age","bmi","SES","smoke","inAgedCare"),asso.output = "white.pos.neg")
+susceptibility <- makePhenotypes(ukb.data=covid_example("sim_ukb.tab.gz"),
+                        res.eng=covid_example("sim_result_england.txt.gz"),
+                        death.file=covid_example("sim_death.txt.gz"),
+                        death.cause.file=covid_example("sim_death_cause.txt.gz"),
+                        hesin.file=covid_example("sim_hesin.txt.gz"),
+                        hesin_diag.file=covid_example("sim_hesin_diag.txt.gz"),
+                        hesin_oper.file=covid_example("sim_hesin_oper.txt.gz"),
+                        hesin_critical.file=covid_example("sim_hesin_critical.txt.gz"),
+                        code.file=covid_example("coding240.txt.gz"),
+                        pheno.type = "susceptibility",
+                        out.name=paste0(covid_example("results"),"/phenotype"))
 ```
 
 ## Mortality
