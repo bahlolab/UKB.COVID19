@@ -31,11 +31,11 @@ This is a basic example which shows you how to creat a covariate file with risk 
 
 ```r
 library(UKB.COVID19)
-covar <- risk.factor(ukb.data=covid_example("sim_ukb.tab.gz"), 
-                         ABO.data=covid_example("sim_covid19_misc.txt.gz"),
-                         hesin.file=covid_example("sim_hesin.txt.gz"),
-                         res.eng=covid_example("sim_result_england.txt.gz"),
-                         out.file=paste0(covid_example("results"),"/covariate"))
+covar <- risk.factor(ukb.data="ukb.tab", 
+                         ABO.data="covid19_misc.txt",
+                         hesin.file="hesin.txt",
+                         res.eng="result_england.txt",
+                         out.file="./results/covariate")
 ```
 
 ## Susceptibility
@@ -43,54 +43,57 @@ covar <- risk.factor(ukb.data=covid_example("sim_ukb.tab.gz"),
 This is an example which shows you how to generate a file with COVID-19 susceptibility phenotypes:
 
 ```r
-susceptibility <- makePhenotypes(ukb.data=covid_example("sim_ukb.tab.gz"),
-                        res.eng=covid_example("sim_result_england.txt.gz"),
-                        death.file=covid_example("sim_death.txt.gz"),
-                        death.cause.file=covid_example("sim_death_cause.txt.gz"),
-                        hesin.file=covid_example("sim_hesin.txt.gz"),
-                        hesin_diag.file=covid_example("sim_hesin_diag.txt.gz"),
-                        hesin_oper.file=covid_example("sim_hesin_oper.txt.gz"),
-                        hesin_critical.file=covid_example("sim_hesin_critical.txt.gz"),
-                        code.file=covid_example("coding240.txt.gz"),
+susceptibility <- makePhenotypes(ukb.data="ukb.tab",
+                        res.eng="result_england.txt",
+                        death.file="death.txt",
+                        death.cause.file="death_cause.txt",
+                        hesin.file="hesin.txt",
+                        hesin_diag.file="hesin_diag.txt",
+                        hesin_oper.file="hesin_oper.txt",
+                        hesin_critical.file="hesin_critical.txt",
+                        code.file="coding240.txt.gz",
                         pheno.type = "susceptibility",
-                        out.name=paste0(covid_example("results"),"/phenotype"))
+                        out.name=paste0("./results/susceptibility")
 ```
+code.file can be found in UKB.COVID19/inst/extdata/coding240.txt.gz.
 
 ## Mortality
 
 This is an example which shows you how to generate a file with COVID-19 mortality phenotype:
 
 ```r
-mortality <- makePhenotypes(ukb.data=covid_example("sim_ukb.tab.gz"),
-                        res.eng=covid_example("sim_result_england.txt.gz"),
-                        death.file=covid_example("sim_death.txt.gz"),
-                        death.cause.file=covid_example("sim_death_cause.txt.gz"),
-                        hesin.file=covid_example("sim_hesin.txt.gz"),
-                        hesin_diag.file=covid_example("sim_hesin_diag.txt.gz"),
-                        hesin_oper.file=covid_example("sim_hesin_oper.txt.gz"),
-                        hesin_critical.file=covid_example("sim_hesin_critical.txt.gz"),
-                        code.file=covid_example("coding240.txt.gz"),
+mortality <- makePhenotypes(ukb.data="ukb.tab",
+                        res.eng="result_england.txt",
+                        death.file="death.txt",
+                        death.cause.file="death_cause.txt",
+                        hesin.file="hesin.txt",
+                        hesin_diag.file="hesin_diag.txt",
+                        hesin_oper.file="hesin_oper.txt",
+                        hesin_critical.file="hesin_critical.txt",
+                        code.file="coding240.txt.gz",
                         pheno.type = "mortality",
-                        out.name=paste0(covid_example("results"),"/phenotype"))
+                        out.name="./results/mortality")
 ```
+code.file can be found in UKB.COVID19/inst/extdata/coding240.txt.gz.
 
 ## Severity
 
 This is an example which shows you how to generate a file with COVID-19 severity phenotypes:
 
 ```r
-severity <- makePhenotypes(ukb.data=covid_example("sim_ukb.tab.gz"),
-                        res.eng=covid_example("sim_result_england.txt.gz"),
-                        death.file=covid_example("sim_death.txt.gz"),
-                        death.cause.file=covid_example("sim_death_cause.txt.gz"),
-                        hesin.file=covid_example("sim_hesin.txt.gz"),
-                        hesin_diag.file=covid_example("sim_hesin_diag.txt.gz"),
-                        hesin_oper.file=covid_example("sim_hesin_oper.txt.gz"),
-                        hesin_critical.file=covid_example("sim_hesin_critical.txt.gz"),
-                        code.file=covid_example("coding240.txt.gz"),
+severity <- makePhenotypes(ukb.data="ukb.tab",
+                        res.eng="result_england.txt",
+                        death.file="death.txt",
+                        death.cause.file="death_cause.txt",
+                        hesin.file="hesin.txt",
+                        hesin_diag.file="hesin_diag.txt",
+                        hesin_oper.file="hesin_oper.txt",
+                        hesin_critical.file="hesin_critical.txt",
+                        code.file="coding240.txt.gz",
                         pheno.type = "severity",
-                        out.name=paste0(covid_example("results"),"/phenotype"))
+                        out.name="./results/severity"))
 ```
+code.file can be found in UKB.COVID19/inst/extdata/coding240.txt.gz.
 
 ## Co-morbidity Summary & Co-morbidity Association Tests
 
