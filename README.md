@@ -19,7 +19,7 @@ OR
 install.packages("devtools")
 devtools::install_github("bahlolab/UKB.COVID19")
 ```
-
+OR
 ```r
 install.packages("UKB.COVID19")
 library(UKB.COVID19)
