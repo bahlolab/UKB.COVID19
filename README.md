@@ -21,11 +21,8 @@ devtools::install_github("bahlolab/UKB.COVID19")
 ```
 
 ```r
+install.packages("UKB.COVID19")
 library(UKB.COVID19)
-library(questionr) # for odd ratio calculation in association test 
-require(data.table)
-library(tidyverse)
-library(magrittr)
 ```
 
 ## Risk Factor
