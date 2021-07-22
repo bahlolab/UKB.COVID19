@@ -9,7 +9,7 @@ Authors@R:
 		role = c("aut", "cre"),
 		comment = c(ORCID = "https://orcid.org/0000-0002-5143-4146"))
 Maintainer: Longfei Wang <wang.lo@wehi.edu.au>
-Description: Process UK Biobank COVID-19 test result data for susceptibility, severity and mortality analyses, perform potential non-genetic COVID-19 risk factor and co-morbidity association tests. Wang et al. (2021) <doi:10.12688/f1000research.11997.1>.
+Description: Process UK Biobank COVID-19 test result data for susceptibility, severity and mortality analyses, perform potential non-genetic COVID-19 risk factor and co-morbidity association tests. Wang et al. (2021) <doi:10.12688/f1000research.xxxx.x>.
 Imports:
     questionr,
     data.table,
