@@ -108,7 +108,6 @@ comorb <- comorbidity.summary(ukb.data="ukb.tab",
                               primary = FALSE,
                               Date.start = "16/03/2020",
                               outfile="./results/comorbidity_2020-3-16.txt")
-ICD10.file can be found in UKB.COVID19/inst/extdata/ICD10.coding19.txt.gz.
 
 # association tests 
 comorb.asso <- comorbidity.asso(pheno=susceptibility,
