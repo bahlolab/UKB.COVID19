@@ -123,3 +123,42 @@ comorb.asso <- comorbidity.asso(pheno=susceptibility,
 ICD10.file can be found in UKB.COVID19/inst/extdata/ICD10.coding19.txt.gz.
 
 
+## Sample QC
+
+This is a basic example which shows you how to create sample QC files, and sample inclusion / exclusion lists for specified software:
+
+```r
+sampleQC(ukb.data=covid_example("sim_ukb.tab.gz"), 
+         withdrawnFile=covid_example("sim_withdrawn.csv.gz"), 
+         ancestry="all", 
+         software="SAIGE", 
+         outDir=covid_example("results"))
+```
+
+## Variant QC
+
+This is a basic example which shows you how to create SNP inclusion lists (SNPID and rsID formats) for given MAF/INFO filters. Also outputs list of SNPs to be used for genetic Relatedness Matrix (GRM) calculations.
+
+```r
+variantQC(snpQcFile=covid_example("sim_ukb_snp_qc.txt.gz"), 
+          mfiDir=covid_example("alleleFreqs"), 
+          mafFilt=0.001, 
+          infoFilt=0.5, 
+          outDir=covid_example("results"))
+```
+
+## Create GWAS files
+
+This is a basic example which shows you how to generate files for GWAS Software. SAIGE and Plink currently supported.
+
+```r
+makeGWASFiles(ukb.data=covid_example("sim_ukb.tab.gz"), 
+              pheno=phe, 
+              covariates=covar, 
+              phe.name="hospitalisation", 
+              cov.name=NULL, 
+              includeSampsFile=NULL, 
+              software="SAIGE", 
+              outDir=covid_example("results"), 
+              prefix="hospitalisation")
+```
