@@ -147,7 +147,7 @@ variantQC(snpQcFile=covid_example("sim_ukb_snp_qc.txt.gz"),
           outDir=covid_example("results"))
 ```
 
-## Create GWAS files
+## Generate GWAS files
 
 This is a basic example which shows you how to generate files for GWAS Software. SAIGE and Plink currently supported.
 
