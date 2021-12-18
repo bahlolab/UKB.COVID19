@@ -1,2 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^LICENSE\.md$
+^docs$
+^pkgdown$
+^~/hpc_home/CoVID-19/UKB\.COVID19/GWAS/UKB\.COVID19_GWAStutorial\.html$
+^~/hpc_home/CoVID-19/UKB\.COVID19/GWAS/UKB\.COVID19_GWAStutorial\.Rmd$
